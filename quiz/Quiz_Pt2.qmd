@@ -33,9 +33,26 @@ You also have a separate data frame called *brightness.csv* where each row lists
 
 ```{r}
 # Answer 
- 
+ > library(readr)
+> brightness <- read_csv("quiz/brightness.csv")
+Rows: 42 Columns: 2                                                      
+── Column specification ───────────────────────────────────────────────────
+Delimiter: ","
+chr (1): nestbox
+dbl (1): brightness
 
-# Google? y/n
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> View(brightness)
+> library(readr)
+> swallows <- read_csv("quiz/swallows.csv")
+Rows: 42 Columns: 4                                                        
+── Column specification ───────────────────────────────────────────────────
+Delimiter: ","
+chr (2): nestbox, treatment
+dbl (2): brood, n_fledged
+
+# Google? n
 ```
 
 #### Wrangle your data
@@ -44,27 +61,28 @@ You realize that you want to add brightness information onto your main swallows 
 
 ```{r}
 #Answer
-
-# Google? y/n
+birds <- merge(brightness, swallows)
+# Google? y
 ```
 
 Inspect your combined data frame. Do some sort of quick sanity check on each column to catch any obvious entry errors. Correct as necessary
 
 ```{r}
 # Answer
+str(birds)
+head(birds)
 
-
-# Google y/n
+# Google n
 ```
 
 Create a new column called prop_fledged that contains the proportion of nestlings that fledged from each nest.
 
 ```{r}
 #Answer
+prop_fledged <- mutate(birds, rate = n_fledged/brood*100)
 
 
-
-# Google? y/n
+# Google? n
 ```
 
 #### Explore the data
@@ -73,26 +91,27 @@ What was the mean proportion of nestlings fledged in each treatment?
 
 ```{r}
 # Answer 
+mean(prop_fledged$rate, na= TRUE)
 
 
-
-# Google? y/n
+# Google? y
 ```
 
 Create a plot showing fledging success differences between treatments
 
 ```{r}
 #Answer
+num_treatment<- as.numeric(birds$treatment)
+prop_fledged |> ggplot() + geom_point(aes(num_treatment, prop_fledged$rate))
 
-
-# Google? y/n
+# Google? y
 ```
 
 Is there any evidence that female brightness influenced fledging success? Create a plot to visually investigate this question.
 
 ```{r}
 #Answer
-
-
-# Google? y/n
+No, there is no evidence
+birds |> ggplot() + geom_point(aes(brightness, prop_fledged$rate))
+# Google? n
 ```
